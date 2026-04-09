@@ -1,0 +1,12 @@
+# Root level gitignore
+.DS_Store
+Thumbs.db
+*.log
+node_modules
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
