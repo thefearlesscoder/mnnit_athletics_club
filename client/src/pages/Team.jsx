@@ -11,7 +11,7 @@ const MOCK_TEAM = [
 const Team = () => {
   const [filter, setFilter] = useState('All');
   
-  const categories = ['All', 'Member', 'Coordinator', 'Faculty', 'Ground Worker'];
+  const categories = ['All', 'Member', 'Coordinator', 'Faculty'];
 
   const displayedMembers = filter === 'All' 
     ? MOCK_TEAM 
