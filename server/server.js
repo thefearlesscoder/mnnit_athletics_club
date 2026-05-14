@@ -1,16 +1,17 @@
+import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import apiRoutes from './src/routes/api.js';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // In production, be more restrictive (e.g., 'https://www.yourdomain.com')
+  credentials: true
+}));
 app.use(express.json());
 
 // Main API Routes
