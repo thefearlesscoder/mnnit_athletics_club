@@ -53,11 +53,11 @@ router.post('/admin/requests/:id/reject', protect, admin, rejectRequest);
 
 // ─── Admin: Content management ────────────────────────────────────────────────
 router.post('/admin/notice', protect, admin, createNotice);
-router.post('/admin/notice/edit/:id', protect, admin, editNotice);
+router.put('/admin/notice/edit/:id', protect, admin, editNotice);
 router.post('/admin/notice/delete/:id', protect, admin, deleteNotice);
 
 router.post('/admin/event', protect, admin, createEvent);
-router.post('/admin/event/edit/:id', protect, admin, editEvent);
+router.put('/admin/event/edit/:id', protect, admin, editEvent);
 router.post('/admin/event/delete/:id', protect, admin, deleteEvent);
 
 // add records routes (schema not decided yet (maybe pdf display or in app display))

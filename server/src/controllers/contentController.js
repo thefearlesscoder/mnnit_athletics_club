@@ -53,6 +53,7 @@ export const createNotice = async (req, res) => {
 
 export const editNotice = async (req , res) => {
     const id = req.params.id;
+
     const {title, content , displayUntil} = req.body;
     try {
         const notice = await Notice.findById(id);
@@ -73,6 +74,7 @@ export const deleteNotice = async (req, res) =>{
   const id = req.params.id;
   try {
     const notice = await Notice.findById(id);
+    // console.log("this is the notic - ", notice);
     if(!notice) {
       return res.status(404).json({message: "Notice not found"});
     }
