@@ -6,9 +6,9 @@ const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 const inputStyle = {
   padding: '0.85rem 1rem',
   borderRadius: '8px',
-  border: '1px solid rgba(255,255,255,0.15)',
-  background: 'rgba(0,0,0,0.25)',
-  color: 'white',
+  border: '1px solid rgba(0,0,0,0.15)',
+  background: 'rgba(0,0,0,0.05)',
+  color: 'var(--text-primary)',
   width: '100%',
   boxSizing: 'border-box',
   fontSize: '0.95rem',
@@ -114,7 +114,7 @@ const MemberEditProfile = () => {
       <div className="page-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: 'center' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🔐</div>
-          <p style={{ color: 'var(--text-muted)' }}>Verifying your access link…</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Verifying your access link…</p>
         </motion.div>
       </div>
     );
@@ -131,7 +131,7 @@ const MemberEditProfile = () => {
         >
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⏳</div>
           <h3 style={{ color: '#ef4444', marginBottom: '0.75rem' }}>Link Expired or Invalid</h3>
-          <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, fontSize: '0.95rem' }}>
+          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '0.95rem' }}>
             This access link has either expired (links are valid for 2 hours) or is not valid.
             Please request a new link from the homepage.
           </p>
@@ -166,7 +166,7 @@ const MemberEditProfile = () => {
         >
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎉</div>
           <h3 style={{ color: '#10b981', marginBottom: '0.75rem' }}>Profile Updated!</h3>
-          <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>{saveMsg}</p>
+          <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>{saveMsg}</p>
           <a
             href="/"
             style={{
@@ -199,7 +199,7 @@ const MemberEditProfile = () => {
         <h2 style={{ textAlign: 'center', marginBottom: '0.4rem' }}>
           Edit <span style={{ color: 'var(--accent-primary)' }}>Profile</span>
         </h2>
-        <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '2rem' }}>
+        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '0.88rem', marginBottom: '2rem' }}>
           All fields except Name are optional. Your profile will be visible on the website.
         </p>
 
@@ -208,11 +208,11 @@ const MemberEditProfile = () => {
           {/* Row: Name + Batch */}
           <div style={{ display: 'flex', gap: '1rem' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Full Name *</label>
+              <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Full Name *</label>
               <input id="edit-name" name="name" required value={formData.name} onChange={handleChange} style={inputStyle} />
             </div>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Batch (Year)</label>
+              <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Batch (Year)</label>
               <input id="edit-batch" name="batch" placeholder="e.g. 2024" value={formData.batch} onChange={handleChange} style={inputStyle} />
             </div>
           </div>
@@ -220,24 +220,24 @@ const MemberEditProfile = () => {
           {/* Row: Branch + Birthday */}
           <div style={{ display: 'flex', gap: '1rem' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Branch / Department</label>
+              <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Branch / Department</label>
               <input id="edit-branch" name="branch" placeholder="e.g. Computer Science" value={formData.branch} onChange={handleChange} style={inputStyle} />
             </div>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Birthday</label>
+              <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Birthday</label>
               <input id="edit-birthday" type="date" name="birthday" value={formData.birthday} onChange={handleChange} style={inputStyle} />
             </div>
           </div>
 
           {/* Events */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Events Participated (comma separated)</label>
+            <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Events Participated (comma separated)</label>
             <input id="edit-events" name="events" placeholder="e.g. 100m Sprint, Long Jump, 4×100m Relay" value={formData.events} onChange={handleChange} style={inputStyle} />
           </div>
 
           {/* Achievements */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Achievements (comma separated)</label>
+            <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Achievements (comma separated)</label>
             <textarea
               id="edit-achievements"
               name="achievements"
@@ -252,11 +252,11 @@ const MemberEditProfile = () => {
           {/* Row: LinkedIn + Instagram */}
           <div style={{ display: 'flex', gap: '1rem' }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>LinkedIn URL</label>
+              <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>LinkedIn URL</label>
               <input id="edit-linkedin" name="linkedIn" type="url" placeholder="https://linkedin.com/in/..." value={formData.linkedIn} onChange={handleChange} style={inputStyle} />
             </div>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Instagram URL</label>
+              <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Instagram URL</label>
               <input id="edit-instagram" name="instagram" type="url" placeholder="https://instagram.com/..." value={formData.instagram} onChange={handleChange} style={inputStyle} />
             </div>
           </div>
@@ -276,7 +276,7 @@ const MemberEditProfile = () => {
               padding: '1rem',
               borderRadius: '8px',
               border: 'none',
-              background: saveStatus === 'saving' ? 'rgba(59,130,246,0.5)' : 'var(--accent-primary)',
+              background: saveStatus === 'saving' ? 'var(--accent-glow)' : 'var(--accent-primary)',
               color: 'white',
               fontWeight: 'bold',
               cursor: saveStatus === 'saving' ? 'not-allowed' : 'pointer',

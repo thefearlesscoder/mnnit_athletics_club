@@ -21,7 +21,7 @@ const Team = () => {
     <div className="page-content">
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <h1>Meet the <span style={{ color: 'var(--accent-primary)' }}>Team</span></h1>
-        <p style={{ color: 'var(--text-muted)' }}>The people who make the legacy possible.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>The people who make the legacy possible.</p>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}>
@@ -31,8 +31,8 @@ const Team = () => {
             onClick={() => setFilter(cat)}
             style={{
               background: filter === cat ? 'var(--accent-primary)' : 'transparent',
-              color: filter === cat ? 'white' : 'var(--text-light)',
-              border: filter === cat ? 'none' : '1px solid rgba(255,255,255,0.2)',
+              color: filter === cat ? 'white' : 'var(--text-primary)',
+              border: filter === cat ? 'none' : '1px solid rgba(0,0,0,0.2)',
               padding: '0.4rem 1.2rem',
               borderRadius: '20px',
               cursor: 'pointer',
@@ -67,11 +67,11 @@ const Team = () => {
             </div>
             <h3>{member.name}</h3>
             <p style={{ color: 'var(--accent-primary)', fontWeight: 'bold' }}>{member.role}</p>
-            {member.branch !== '-' && <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{member.branch}</p>}
+            {member.branch !== '-' && <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{member.branch}</p>}
             
             {member.events.length > 0 && (
               <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                {member.events.map(ev => <span key={ev} style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.8rem' }}>{ev}</span>)}
+                {member.events.map(ev => <span key={ev} style={{ background: 'rgba(0,0,0,0.05)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.8rem' }}>{ev}</span>)}
               </div>
             )}
           </motion.div>

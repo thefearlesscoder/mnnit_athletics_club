@@ -11,19 +11,19 @@ const Home = () => {
         alignItems: 'center', 
         justifyContent: 'center',
         textAlign: 'center',
-        background: 'linear-gradient(to bottom, var(--bg-dark), rgba(15, 23, 42, 0.5)), url("https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80")',
+        background: 'linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255, 255, 255, 0.7)), url("https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: 'relative'
       }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)' }}></div>
+        <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255,255,255,0.6)' }}></div>
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           style={{ position: 'relative', zIndex: 1, maxWidth: '800px', padding: '2rem' }}
         >
-          <h1 style={{ fontSize: '4rem', marginBottom: '1rem', textShadow: '0 4px 10px rgba(0,0,0,0.5)' }}>
+          <h1 style={{ fontSize: '4rem', marginBottom: '1rem', textShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
             <span style={{ color: 'var(--accent-primary)' }}>Faster.</span> Stronger. Higher.
           </h1>
           <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
@@ -55,12 +55,12 @@ const Home = () => {
             <span style={{ fontSize: '1.5rem' }}>📢</span> Announcements
           </h2>
           <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <li style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-              <strong style={{ color: 'var(--text-light)' }}>Trials for Fasters</strong><br/>
+            <li style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+              <strong style={{ color: 'var(--text-primary)' }}>Trials for Fasters</strong><br/>
               <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Posted: Oct 12, 2024</span>
             </li>
-            <li style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-              <strong style={{ color: 'var(--text-light)' }}>AAM Registration Open</strong><br/>
+            <li style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+              <strong style={{ color: 'var(--text-primary)' }}>AAM Registration Open</strong><br/>
               <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Posted: Oct 10, 2024</span>
             </li>
           </ul>
@@ -70,11 +70,11 @@ const Home = () => {
         <div className="glass-card" style={{ textAlign: 'center' }}>
           <h2 style={{ marginBottom: '1rem' }}>🎉 Birthday Spotlight</h2>
           <div style={{ display: 'inline-block', width: '100px', height: '100px', borderRadius: '50%', background: 'linear-gradient(45deg, #f59e0b, #ef4444)', padding: '3px' }}>
-            <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#333', overflow: 'hidden' }}>
+            <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#fff', overflow: 'hidden' }}>
               <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150" alt="Birthday Boy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
-          <h3 style={{ marginTop: '1rem', color: 'var(--text-light)' }}>Alex Johnson</h3>
+          <h3 style={{ marginTop: '1rem', color: 'var(--text-primary)' }}>Alex Johnson</h3>
           <p style={{ color: 'var(--text-muted)' }}>Sprinter (Batch 2025)</p>
           <p style={{ marginTop: '0.5rem', fontStyle: 'italic' }}>"Wishing you a fantastic year ahead!"</p>
         </div>

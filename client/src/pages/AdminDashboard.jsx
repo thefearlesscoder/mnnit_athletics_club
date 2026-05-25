@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminImageUpload from '../components/AdminImageUpload';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
@@ -17,9 +18,9 @@ const roleColors = { member: '#3b82f6', alumni: '#8b5cf6' };
 const inputStyle = {
   padding: '0.75rem 1rem',
   borderRadius: '8px',
-  border: '1px solid rgba(255,255,255,0.12)',
-  background: 'rgba(0,0,0,0.2)',
-  color: 'white',
+  border: '1px solid rgba(0,0,0,0.12)',
+  background: 'rgba(0,0,0,0.05)',
+  color: 'var(--text-primary)',
   width: '100%',
   boxSizing: 'border-box',
   fontSize: '0.9rem',
@@ -144,10 +145,10 @@ const AdminDashboard = () => {
     }
   };
 
-  // ─────────────────────────────────── Login Screen ──────────────────────────
+  // Login Screen
   if (!isLoggedIn) {
     return (
-      <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg-dark)' }}>
+      <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'var(--bg-primary)' }}>
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -160,11 +161,11 @@ const AdminDashboard = () => {
           </div>
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Email</label>
+              <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Email</label>
               <input id="admin-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required style={inputStyle} placeholder="admin@mac.com" />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              <label style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Password</label>
+              <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Password</label>
               <input id="admin-password" type="password" value={password} onChange={e => setPassword(e.target.value)} required style={inputStyle} />
             </div>
             {loginError && (
@@ -181,12 +182,12 @@ const AdminDashboard = () => {
     );
   }
 
-  // ─────────────────────────────────── Tab Renderers ─────────────────────────
+  // tab renderers
   const renderRequests = () => (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <h2 style={{ margin: 0 }}>Login Requests</h2>
-        <button onClick={fetchRequests} style={{ padding: '0.5rem 1.2rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.15)', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '0.85rem' }}>
+        <button onClick={fetchRequests} style={{ padding: '0.5rem 1.2rem', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.15)', background: 'transparent', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.85rem' }}>
           ↺ Refresh
         </button>
       </div>
@@ -212,11 +213,11 @@ const AdminDashboard = () => {
         )}
       </AnimatePresence>
 
-      {reqLoading && <p style={{ color: 'var(--text-muted)' }}>Loading requests…</p>}
+      {reqLoading && <p style={{ color: 'var(--text-secondary)' }}>Loading requests…</p>}
       {reqError && <p style={{ color: '#ef4444' }}>⚠️ {reqError}</p>}
 
       {!reqLoading && !reqError && requests.length === 0 && (
-        <div className="glass-card" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+        <div className="glass-card" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>🎉</div>
           <p>No pending requests. All caught up!</p>
         </div>
@@ -238,8 +239,8 @@ const AdminDashboard = () => {
                   <h4 style={{ margin: 0 }}>{r.name}</h4>
                   <Badge label={r.role} color={roleColors[r.role] || '#888'} />
                 </div>
-                <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.88rem' }}>{r.email}</p>
-                {r.message && <p style={{ margin: '0.4rem 0 0', color: 'var(--text-muted)', fontSize: '0.83rem', fontStyle: 'italic' }}>"{r.message}"</p>}
+                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.88rem' }}>{r.email}</p>
+                {r.message && <p style={{ margin: '0.4rem 0 0', color: 'var(--text-secondary)', fontSize: '0.83rem', fontStyle: 'italic' }}>"{r.message}"</p>}
                 <p style={{ margin: '0.4rem 0 0', color: '#555', fontSize: '0.78rem' }}>
                   {new Date(r.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
                 </p>
@@ -277,7 +278,7 @@ const AdminDashboard = () => {
             if (res.ok) { setEvents(prev => [...prev, data]); setEventName(''); setEventYear(''); alert('Event added!'); }
             else alert(data.message);
           } catch { alert('Error adding event'); }
-        }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '2rem' }}>
+        }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', borderBottom: '1px solid rgba(0,0,0,0.08)', paddingBottom: '2rem' }}>
           <h3>Add New Event</h3>
           <div style={{ display: 'flex', gap: '1rem' }}>
             <input required placeholder="Event Name" value={eventName} onChange={e => setEventName(e.target.value)} style={{ ...inputStyle, flex: 2 }} />
@@ -304,11 +305,11 @@ const AdminDashboard = () => {
         }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <h3>Create New Notice</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Title</label>
+            <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Title</label>
             <input required value={noticeTitle} onChange={e => setNoticeTitle(e.target.value)} placeholder="e.g. Trials for Fasters" style={inputStyle} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Content</label>
+            <label style={{ fontSize: '0.83rem', color: 'var(--text-secondary)' }}>Content</label>
             <textarea required rows="3" value={noticeContent} onChange={e => setNoticeContent(e.target.value)} style={{ ...inputStyle, resize: 'vertical' }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -326,9 +327,9 @@ const AdminDashboard = () => {
       case 'requests': return renderRequests();
       case 'event':   return renderEvent();
       case 'notice':  return renderNotice();
-      case 'images':  return <div><h2>Manage Images</h2><p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Image management (Cloudinary upload) coming soon.</p></div>;
-      case 'birthday': return <div><h2>Birthday Spotlight</h2><p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Select a member to spotlight on the landing page.</p></div>;
-      case 'members': return <div><h2>Manage Members</h2><p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Member management coming soon. Use Login Requests to approve new members.</p></div>;
+      case 'images':  return <AdminImageUpload adminToken={adminToken} />;
+      case 'birthday': return <div><h2>Birthday Spotlight</h2><p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>Select a member to spotlight on the landing page.</p></div>;
+      case 'members': return <div><h2>Manage Members</h2><p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>Member management coming soon. Use Login Requests to approve new members.</p></div>;
       default: return null;
     }
   };
@@ -343,9 +344,9 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-dark)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-primary)' }}>
       {/* Sidebar */}
-      <div style={{ width: '260px', background: 'rgba(255,255,255,0.02)', borderRight: '1px solid rgba(255,255,255,0.05)', padding: '2rem 0', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ width: '260px', background: 'rgba(0,0,0,0.02)', borderRight: '1px solid rgba(0,0,0,0.05)', padding: '2rem 0', display: 'flex', flexDirection: 'column' }}>
         <h2 style={{ padding: '0 1.5rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.1rem' }}>
           <div style={{ width: '32px', height: '32px', background: 'var(--accent-primary)', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '0.75rem', fontWeight: 'bold', flexShrink: 0 }}>MAC</div>
           Admin Panel
@@ -358,8 +359,8 @@ const AdminDashboard = () => {
               style={{
                 padding: '0.85rem 1.5rem',
                 cursor: 'pointer',
-                background: activeTab === tab.id ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                color: activeTab === tab.id ? 'var(--accent-primary)' : 'var(--text-muted)',
+                background: activeTab === tab.id ? 'var(--accent-glow)' : 'transparent',
+                color: activeTab === tab.id ? 'var(--accent-primary)' : 'var(--text-secondary)',
                 borderRight: activeTab === tab.id ? '3px solid var(--accent-primary)' : '3px solid transparent',
                 fontSize: '0.9rem',
                 transition: 'all 0.15s ease',

@@ -22,7 +22,7 @@ const Alumni = () => {
         
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1>Our Legacy: <span style={{ color: 'var(--accent-primary)' }}>The Alumni</span></h1>
-          <p style={{ color: 'var(--text-muted)' }}>Honoring the pillars of the MNNIT Athletics Club.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Honoring the pillars of the MNNIT Athletics Club.</p>
         </div>
 
         {/* Batch Selector */}
@@ -33,7 +33,7 @@ const Alumni = () => {
               onClick={() => setSelectedBatch(batch)}
               style={{
                 background: selectedBatch === batch ? 'var(--accent-primary)' : 'transparent',
-                color: selectedBatch === batch ? 'white' : 'var(--text-light)',
+                color: selectedBatch === batch ? 'white' : 'var(--text-primary)',
                 border: '1px solid var(--accent-primary)',
                 padding: '0.5rem 1.5rem',
                 borderRadius: '20px',
@@ -50,7 +50,7 @@ const Alumni = () => {
         {selectedBatch !== 'Default' && (
           <div className="glass-card" style={{ marginBottom: '2rem', textAlign: 'center', borderLeft: '4px solid #f59e0b' }}>
             <h3>Batch {selectedBatch} Major Achievements</h3>
-            <p style={{ color: 'var(--text-muted)' }}>Secured overall Top 3 finish in Inter-NIT Sports Meet {selectedBatch}.</p>
+            <p style={{ color: 'var(--text-secondary)' }}>Secured overall Top 3 finish in Inter-NIT Sports Meet {selectedBatch}.</p>
           </div>
         )}
 
@@ -65,7 +65,7 @@ const Alumni = () => {
             >
               <div style={{ 
                 height: '100px', 
-                background: 'linear-gradient(45deg, var(--bg-darker), var(--accent-primary))',
+                background: 'linear-gradient(45deg, var(--bg-secondary), var(--accent-primary))',
                 margin: '-1.5rem -1.5rem 1.5rem -1.5rem'
               }}></div>
               
@@ -75,7 +75,7 @@ const Alumni = () => {
                 borderRadius: '50%', 
                 background: '#ccc', 
                 marginTop: '-55px', 
-                border: '4px solid var(--bg-dark)',
+                border: '4px solid var(--bg-primary)',
                 marginBottom: '1rem'
               }}>
                 <img src={`https://ui-avatars.com/api/?name=${alump.name}&background=random`} alt={alump.name} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
@@ -83,25 +83,25 @@ const Alumni = () => {
 
               <h3>{alump.name}</h3>
               <p style={{ color: 'var(--accent-primary)', fontWeight: 'bold', fontSize: '0.9rem' }}>{alump.role}</p>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1rem' }}>{alump.branch} | Bath {alump.batch}</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1rem' }}>{alump.branch} | Bath {alump.batch}</p>
               
               <div style={{ marginBottom: '1rem' }}>
                 <strong style={{ fontSize: '0.85rem' }}>Events:</strong>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.3rem' }}>
-                  {alump.events.map(ev => <span key={ev} style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem' }}>{ev}</span>)}
+                  {alump.events.map(ev => <span key={ev} style={{ background: 'rgba(0,0,0,0.05)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem' }}>{ev}</span>)}
                 </div>
               </div>
 
               <div style={{ marginBottom: '1rem' }}>
                 <strong style={{ fontSize: '0.85rem' }}>Achievements:</strong>
-                <ul style={{ paddingLeft: '1rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                <ul style={{ paddingLeft: '1rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                   {alump.achievements.map((ach, i) => <li key={i}>{ach}</li>)}
                 </ul>
               </div>
               
-              <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem', marginTop: 'auto' }}>
-                 <a href={alump.linkedIn} target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>LinkedIn</a>
-                 <a href={alump.instagram} target="_blank" rel="noreferrer" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Instagram</a>
+              <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid rgba(0,0,0,0.1)', paddingTop: '1rem', marginTop: 'auto' }}>
+                 <a href={alump.linkedIn} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>LinkedIn</a>
+                 <a href={alump.instagram} target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Instagram</a>
               </div>
             </motion.div>
           ))}

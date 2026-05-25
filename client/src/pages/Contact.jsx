@@ -32,8 +32,8 @@ const Contact = () => {
                <p>MNNIT Athletics Ground,<br/>Motilal Nehru National Institute of Technology, Prayagraj, UP 211004</p>
             </div>
             <div style={{ marginTop: 'auto', display: 'flex', gap: '1rem' }}>
-               <a href="#" style={{ color: 'var(--text-light)', background: 'rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '8px', textDecoration: 'none' }}>Instagram</a>
-               <a href="#" style={{ color: 'var(--text-light)', background: 'rgba(255,255,255,0.1)', padding: '0.5rem 1rem', borderRadius: '8px', textDecoration: 'none' }}>LinkedIn</a>
+               <a href="#" style={{ color: 'var(--text-primary)', background: 'rgba(0,0,0,0.05)', padding: '0.5rem 1rem', borderRadius: '8px', textDecoration: 'none' }}>Instagram</a>
+               <a href="#" style={{ color: 'var(--text-primary)', background: 'rgba(0,0,0,0.05)', padding: '0.5rem 1rem', borderRadius: '8px', textDecoration: 'none' }}>LinkedIn</a>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ const Contact = () => {
                  type="text" 
                  value={formData.name}
                  onChange={e => setFormData({...formData, name: e.target.value})}
-                 style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.2)', color: 'white' }}
+                 style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.5)', color: 'var(--text-primary)' }}
                />
              </div>
 
@@ -65,7 +65,7 @@ const Contact = () => {
                  type="email" 
                  value={formData.email}
                  onChange={e => setFormData({...formData, email: e.target.value})}
-                 style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.2)', color: 'white' }}
+                 style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.5)', color: 'var(--text-primary)' }}
                />
              </div>
 
@@ -76,7 +76,7 @@ const Contact = () => {
                  rows="5"
                  value={formData.message}
                  onChange={e => setFormData({...formData, message: e.target.value})}
-                 style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.2)', color: 'white', resize: 'vertical' }}
+                 style={{ padding: '0.8rem', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.2)', background: 'rgba(255,255,255,0.5)', color: 'var(--text-primary)', resize: 'vertical' }}
                />
              </div>
 

@@ -37,8 +37,8 @@ const Gallery = () => {
               onClick={() => { setSelectedYear(year); setSelectedEvent(MOCK_EVENTS[year][0]); }}
               style={{
                 background: selectedYear === year ? 'var(--accent-primary)' : 'transparent',
-                color: selectedYear === year ? 'white' : 'var(--text-light)',
-                border: selectedYear === year ? 'none' : '1px solid rgba(255,255,255,0.2)',
+                color: selectedYear === year ? 'white' : 'var(--text-primary)',
+                border: selectedYear === year ? 'none' : '1px solid rgba(0,0,0,0.2)',
                 padding: '0.4rem 1.2rem',
                 borderRadius: '15px',
                 cursor: 'pointer'
@@ -56,7 +56,7 @@ const Gallery = () => {
               key={event}
               onClick={() => setSelectedEvent(event)}
               style={{
-                background: selectedEvent === event ? 'rgba(255,255,255,0.1)' : 'transparent',
+                background: selectedEvent === event ? 'rgba(0,0,0,0.05)' : 'transparent',
                 color: selectedEvent === event ? 'var(--accent-primary)' : 'var(--text-muted)',
                 padding: '0.3rem 1rem',
                 borderRadius: '10px',
@@ -87,7 +87,7 @@ const Gallery = () => {
                overflow: 'hidden', 
                borderRadius: '10px',
                height: '200px',
-               boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+               boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
              }}
           >
             <img src={photo.url} alt={photo.caption} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -119,7 +119,7 @@ const Gallery = () => {
               style={{ maxWidth: '90%', maxHeight: '90%' }}
             >
               <img src={selectedImage.url} alt={selectedImage.caption} style={{ width: '100%', height: 'auto', maxHeight: '80vh', borderRadius: '10px' }} />
-              <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '1.2rem' }}>{selectedImage.caption}</p>
+              <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '1.2rem', color: '#ffffff' }}>{selectedImage.caption}</p>
             </motion.div>
           </motion.div>
         )}

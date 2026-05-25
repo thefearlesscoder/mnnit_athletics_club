@@ -6,6 +6,7 @@ import { editProfile, loginUser, registerUser } from '../controllers/authControl
 import { getNotices, getAlumni, getEvents, getRecords, createNotice, createEvent, editNotice, deleteNotice, editEvent, deleteEvent } from '../controllers/contentController.js';
 import { submitRequest, getRequests, approveRequest, rejectRequest, getApprovedEmails } from '../controllers/requestController.js';
 import { verifyMagicLink, getMyProfile, updateMyProfile, getBirthdaySpotlight, addMember } from '../controllers/memberController.js';
+import { upload, uploadImages } from '../controllers/uploadController.js';
 
 const router = express.Router();
 
@@ -66,6 +67,9 @@ router.post('/admin/notice/delete/:id', protect, admin, deleteNotice);
 router.post('/admin/event', protect, admin, createEvent);
 router.put('/admin/event/edit/:id', protect, admin, editEvent);
 router.post('/admin/event/delete/:id', protect, admin, deleteEvent);
+
+// Admin: Cloudinary Multi-image Upload
+router.post('/admin/gallery/upload', protect, admin, upload.any(), uploadImages);
 
 // add records routes (schema not decided yet (maybe pdf display or in app display))
 

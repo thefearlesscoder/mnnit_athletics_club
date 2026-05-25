@@ -12,6 +12,7 @@ const eventSchema = new mongoose.Schema({
   bestAthleteMale: { type: String },
   bestAthleteFemale: { type: String },
   sponsors: [{ name: String, logoUrl: String }],
+  organising_team: [{ name: String, role: String }],
   
   // Gallery images related to the event
   images: [{ 
