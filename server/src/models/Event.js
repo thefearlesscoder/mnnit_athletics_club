@@ -8,7 +8,7 @@ const eventSchema = new mongoose.Schema({
   // AAM Specific details
   date: { type: String },
   chiefGuest: { type: String },
-  participationCount: { type: Number },
+  participationCount: { type: Number }, 
   bestAthleteMale: { type: String },
   bestAthleteFemale: { type: String },
   sponsors: [{ name: String, logoUrl: String }],

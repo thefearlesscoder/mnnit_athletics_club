@@ -81,11 +81,11 @@ const Home = () => {
 
         {/* Coordinator Note */}
         <div className="glass-card">
-          <h2 style={{ marginBottom: '1rem' }}>✍️ Note from the Captain</h2>
+          <h2 style={{ marginBottom: '1rem' }}>✍️ Our Moto</h2>
           <blockquote style={{ fontStyle: 'italic', color: 'var(--text-muted)', borderLeft: '2px solid var(--accent-primary)', paddingLeft: '1rem' }}>
-            "Athletics is not just about moving fast, it's about pushing boundaries and realizing what you are truly capable of. Our legacy is built on the sweat of our alumni, and we aim to carry it forward with pride."
+            "Athletics is not just about moving fast, it's about pushing boundaries and realizing what you are truly capable of. Our legacy is built on the sweat of our alumni, and we aim to carry it forward with pride. #PUSH #YOUR # LIMITS"
           </blockquote>
-          <p style={{ marginTop: '1rem', textAlign: 'right', fontWeight: 'bold' }}>- Sarah Connor, Captain</p>
+          <p style={{ marginTop: '1rem', textAlign: 'right', fontWeight: 'bold' }}> MAC </p>
         </div>
 
       </section>

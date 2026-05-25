@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   achievements: [{ type: String }],
   linkedIn: { type: String },
   instagram: { type: String },
-  birthday: { type: Date },
+  dateOfBirth: { type: Date },
   profilePhoto: { type: String }, // URL from Cloudinary
   isCaptain: { type: Boolean, default: false },
   

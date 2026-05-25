@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET || 'secret123', { expiresIn: '2h' });
+  jwt.sign({ id }, process.env.JWT_SECRET , { expiresIn: '2h' });
 
 // ─── PUBLIC: Verify magic link token ─────────────────────────────────────────
 // GET /api/v1/member/verify-token?token=xxx
@@ -42,7 +42,7 @@ export const verifyMagicLink = async (req, res) => {
         achievements: user.achievements,
         linkedIn: user.linkedIn,
         instagram: user.instagram,
-        birthday: user.birthday ? user.birthday.toISOString().split('T')[0] : '',
+        birthday: user.dateOfBirth ? user.dateOfBirth.toISOString().split('T')[0] : '',
         profilePhoto: user.profilePhoto,
         isCaptain: user.isCaptain,
       },
@@ -68,7 +68,7 @@ export const getMyProfile = async (req, res) => {
 // ─── MEMBER: Update own profile ───────────────────────────────────────────────
 // PUT /api/v1/member/profile   (requires Bearer JWT)
 export const updateMyProfile = async (req, res) => {
-  const { name, branch, batch, events, achievements, linkedIn, instagram, birthday, profilePhoto } = req.body;
+  const { name, branch, batch, events, achievements, linkedIn, instagram, birthday, dateOfBirth, profilePhoto } = req.body;
 
   try {
     const user = await User.findById(req.user._id);
@@ -81,7 +81,9 @@ export const updateMyProfile = async (req, res) => {
     if (achievements !== undefined) user.achievements = Array.isArray(achievements) ? achievements : achievements.split(',').map(a => a.trim()).filter(Boolean);
     if (linkedIn !== undefined) user.linkedIn = linkedIn;
     if (instagram !== undefined) user.instagram = instagram;
-    if (birthday !== undefined) user.birthday = birthday ? new Date(birthday) : undefined;
+    
+    const dob = dateOfBirth || birthday;
+    if (dob !== undefined) user.dateOfBirth = dob ? new Date(dob) : undefined;
     if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
 
     const updated = await user.save();
@@ -89,5 +91,80 @@ export const updateMyProfile = async (req, res) => {
   } catch (error) {
     console.error('[updateMyProfile]', error.message);
     res.status(500).json({ message: error.message });
+  }
+};
+
+// add dummy members from (by admin) -> dummy route
+export const addMember = async (req, res) => {
+  try {
+    const { name, email, password, role, branch, batch, events, achievements, linkedIn, instagram, birthday, dateOfBirth, profilePhoto } = req.body;
+    const dob = dateOfBirth || birthday;
+    const user = await User.create({ 
+      name, 
+      email, 
+      password, 
+      role, 
+      branch, 
+      batch, 
+      events, 
+      achievements, 
+      linkedIn, 
+      instagram, 
+      dateOfBirth: dob ? new Date(dob) : undefined, 
+      profilePhoto 
+    });
+    res.status(201).json({ message: 'Member added successfully.', user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+// extract members for birthday spotlight
+export const getBirthdaySpotlight = async (req, res) => {
+  try {
+
+    const today = new Date();
+
+    const currentMonth = today.getMonth() + 1;
+    const currentDay = today.getDate();
+
+    const users = await User.aggregate([
+      {
+        $addFields: {
+          birthMonth: { $month: "$dateOfBirth" },
+          birthDay: { $dayOfMonth: "$dateOfBirth" }
+        }
+      },
+      {
+        $match: {
+          birthMonth: currentMonth,
+          birthDay: currentDay
+        }
+      },
+      {
+        $project: {
+          name: 1,
+          email: 1,
+          profilePhoto: 1,
+          events: 1,
+          batch: 1,
+          dateOfBirth: 1
+        }
+      }
+    ]);
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+
   }
 };
