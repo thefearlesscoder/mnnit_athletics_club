@@ -96,10 +96,41 @@ export const createEvent = async (req, res) => {
 }
 
 export const editEvent = async(req , res) => {
-
+    const id = req.params.id;
+    const {name, year, isAAM, date, chiefGuest, participationCount, bestAthleteMale, bestAthleteFemale, sponsors, images} = req.body;
+    try {
+        const event = await Event.findById(id);
+        if(!event) {
+            return res.status(404).json({message: "Event not found"});
+        }
+        event.name = name || event.name;
+        event.year = year || event.year;
+        event.isAAM = isAAM || event.isAAM;
+        event.date = date || event.date;
+        event.chiefGuest = chiefGuest || event.chiefGuest;
+        event.participationCount = participationCount || event.participationCount;
+        event.bestAthleteMale = bestAthleteMale || event.bestAthleteMale;
+        event.bestAthleteFemale = bestAthleteFemale || event.bestAthleteFemale;
+        event.sponsors = sponsors || event.sponsors;
+        event.images = images || event.images;
+        await event.save();
+        res.json(event);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
 } 
 
 export const deleteEvent = async(req,res) =>{
-  
+    const id = req.params.id;
+    try{
+      const event = await Event.findById(id);
+      if(!event){
+          return res.status(404).json({message: "Event not found"});
+      }
+      await event.deleteOne();
+      res.json({message: "Event deleted successfully"});
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
 }
 

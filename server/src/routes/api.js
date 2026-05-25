@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
 import { loginUser } from '../controllers/authController.js';
-import { getNotices, getAlumni, getEvents, getRecords, createNotice, createEvent } from '../controllers/contentController.js';
+import { getNotices, getAlumni, getEvents, getRecords, createNotice, createEvent, editNotice, deleteNotice, editEvent, deleteEvent } from '../controllers/contentController.js';
 import { submitRequest, getRequests, approveRequest, rejectRequest } from '../controllers/requestController.js';
 import { verifyMagicLink, getMyProfile, updateMyProfile } from '../controllers/memberController.js';
 
@@ -53,7 +53,14 @@ router.post('/admin/requests/:id/reject', protect, admin, rejectRequest);
 
 // ─── Admin: Content management ────────────────────────────────────────────────
 router.post('/admin/notice', protect, admin, createNotice);
+router.post('/admin/notice/edit/:id', protect, admin, editNotice);
+router.post('/admin/notice/delete/:id', protect, admin, deleteNotice);
+
 router.post('/admin/event', protect, admin, createEvent);
+router.post('/admin/event/edit/:id', protect, admin, editEvent);
+router.post('/admin/event/delete/:id', protect, admin, deleteEvent);
+
+// add records routes (schema not decided yet (maybe pdf display or in app display))
 
 // ─── Member: Magic link verification & profile editing ───────────────────────
 router.get('/member/verify-token', verifyMagicLink);
