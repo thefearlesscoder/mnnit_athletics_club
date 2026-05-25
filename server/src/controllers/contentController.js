@@ -39,6 +39,7 @@ export const getRecords = async (req, res) => {
 };
 
 // Admin protected endpoints
+
 export const createNotice = async (req, res) => {
     const { title, content, displayUntil } = req.body;
     try {
@@ -50,8 +51,41 @@ export const createNotice = async (req, res) => {
     }
 }
 
+export const editNotice = async (req , res) => {
+    const id = req.params.id;
+    const {title, content , displayUntil} = req.body;
+    try {
+        const notice = await Notice.findById(id);
+        if(!notice) {
+            return res.status(404).json({message: "Notice not found"});
+        }
+        notice.title = title || notice.title;
+        notice.content = content || notice.content;
+        notice.displayUntil = displayUntil || notice.displayUntil;
+        await notice.save();
+        res.json(notice);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
+export const deleteNotice = async (req, res) =>{
+  const id = req.params.id;
+  try {
+    const notice = await Notice.findById(id);
+    if(!notice) {
+      return res.status(404).json({message: "Notice not found"});
+    }
+    await notice.deleteOne();
+    res.json({message: "Notice deleted successfully"});
+  } catch (error) {
+    res.status(500).json({message: error.message});
+  }
+}
+  
 export const createEvent = async (req, res) => {
     const { name, year, isAAM } = req.body;
+    // correction required : arrays related to sponsors and gallery images need to be handled properly
     try {
         const event = new Event({ name, year, isAAM });
         await event.save();
@@ -60,3 +94,12 @@ export const createEvent = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const editEvent = async(req , res) => {
+
+} 
+
+export const deleteEvent = async(req,res) =>{
+  
+}
+

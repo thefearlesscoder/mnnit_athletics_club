@@ -4,7 +4,7 @@ import User from '../models/User.js';
 import LoginRequest from '../models/LoginRequest.js';
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET || 'secret123', {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
