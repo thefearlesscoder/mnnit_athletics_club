@@ -10,8 +10,8 @@ import User from './src/models/User.js';
 
 dotenv.config();
 
-const ADMIN_EMAIL = 'admin@mac.com';
-const ADMIN_PASSWORD = 'admin';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 const seed = async () => {
   if (!process.env.MONGO_URI) {
