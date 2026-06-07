@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import FloatingRequestButton from './components/FloatingRequestButton';
@@ -16,7 +16,18 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 
 // Placeholder Pages and Layouts for remaining
-const Footer = () => <footer className="footer"><p>&copy; 2024 MNNIT Athletics Club. All rights reserved.</p></footer>;
+const Footer = () => {
+  return (
+    <footer className="footer">
+      <p>&copy; 2024 MNNIT Athletics Club. All rights reserved.</p>
+
+      <Link to="/memberLogin" className="member-login-btn">
+        Member Login
+      </Link>
+    </footer>
+  );
+};
+
 
 const MainLayout = ({ children }) => (
   <>
@@ -38,7 +49,7 @@ const App = () => {
         <Route path="/aam" element={<MainLayout><AAM /></MainLayout>} />
         <Route path="/team" element={<MainLayout><Team /></MainLayout>} />
         <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-        <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
+        <Route path="/memberLogin" element={<MainLayout><Login /></MainLayout>} />
         <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
         {/* Admin and Member Portals */}
         <Route path="/member-portal" element={<MainLayout><MemberEditProfile /></MainLayout>} />

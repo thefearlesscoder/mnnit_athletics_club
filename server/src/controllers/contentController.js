@@ -1,20 +1,37 @@
 import Event from '../models/Event.js';
 import { Record, Notice } from '../models/Notice.js'; // Note: combined in previous mock for simplicity, but let's assume they export properly.
-import User from '../models/User.js';
+import User from '../models/Member.js';
 
-export const getNotices = async (req, res) => {
+export const getAlumni = async (req, res) => {
   try {
-    const notices = await Notice.find({ displayUntil: { $gte: new Date() } });
-    res.json(notices);
+    const currentYear = new Date().getFullYear().toString();
+    const alumni = await User.find({
+      role: { $ne: 'admin' },
+      batch: { $lt: currentYear }
+    });
+    res.json(alumni);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getAlumni = async (req, res) => {
+export const getAllMembers = async (req, res) => {
   try {
-    const alumni = await User.find({ role: { $in: ['alumni', 'member'] } });
-    res.json(alumni);
+    const currentYear = new Date().getFullYear().toString();
+    const members = await User.find({
+      role: { $ne: 'admin' },
+      batch: { $gte: currentYear }
+    });
+    res.json(members);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getNotices = async (req, res) => {
+  try {
+    const notices = await Notice.find({ displayUntil: { $gte: new Date() } });
+    res.json(notices);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
