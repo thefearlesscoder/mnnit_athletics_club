@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const AdminImageUpload = ({ adminToken }) => {
-  const [event, setEvent] = useState('AAM');
-  const [customEvent, setCustomEvent] = useState('');
-  const [year, setYear] = useState('2026');
+  const [events, setEvents] = useState([]);
+  const [eventId, setEventId] = useState('');
   const [files, setFiles] = useState([]);
   const [isDragActive, setIsDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -14,11 +13,23 @@ const AdminImageUpload = ({ adminToken }) => {
 
   const fileInputRef = useRef(null);
 
-  // Available event options
-  const eventOptions = ['AAM', 'Inter NIT', 'Other'];
+  const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
-  // Available year options (2020 to 2030)
-  const years = Array.from({ length: 11 }, (_, i) => String(2030 - i));
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const res = await fetch(`${API}/content/events`);
+        const data = await res.json();
+        if (res.ok) {
+          setEvents(data);
+          if (data.length > 0) setEventId(data[0]._id);
+        }
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+      }
+    };
+    fetchEvents();
+  }, [API]);
 
   // Drag handlers
   const handleDrag = (e) => {
@@ -87,18 +98,14 @@ const AdminImageUpload = ({ adminToken }) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
-
   // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
     setUploadSuccess(false);
 
-    const activeEventName = event === 'Other' ? customEvent.trim() : event;
-
-    if (!activeEventName) {
-      setErrorMessage('Please specify the event name.');
+    if (!eventId) {
+      setErrorMessage('Please select an event. You may need to create an event first.');
       return;
     }
 
@@ -111,8 +118,7 @@ const AdminImageUpload = ({ adminToken }) => {
     setUploadProgress(20);
 
     const formData = new FormData();
-    formData.append('event', activeEventName);
-    formData.append('year', year);
+    formData.append('eventId', eventId);
     files.forEach(file => {
       formData.append('files', file);
     });
@@ -128,6 +134,12 @@ const AdminImageUpload = ({ adminToken }) => {
       });
 
       setUploadProgress(80);
+      
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server returned an invalid response (not JSON). Please check server logs.");
+      }
+      
       const data = await res.json();
 
       if (!res.ok) {
@@ -138,7 +150,6 @@ const AdminImageUpload = ({ adminToken }) => {
       setUploading(false);
       setUploadSuccess(true);
       setFiles([]); // Clear upload queue upon success
-      setCustomEvent('');
     } catch (err) {
       console.error('Image Upload Error:', err);
       setUploading(false);
@@ -196,65 +207,27 @@ const AdminImageUpload = ({ adminToken }) => {
       <div className="glass-card" style={{ padding: '2rem' }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           
-          {/* Top Row: Event Selection and Year Selection */}
-          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-            {/* Event Dropdown */}
-            <div style={{ flex: '1 1 250px' }}>
-              <label style={labelStyle}>Select Event</label>
-              <select 
-                id="event-select"
-                value={event} 
-                onChange={(e) => {
-                  setEvent(e.target.value);
-                  setErrorMessage('');
-                }} 
-                style={inputStyle}
-              >
-                {eventOptions.map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Year Dropdown */}
-            <div style={{ flex: '1 1 150px' }}>
-              <label style={labelStyle}>Select Year</label>
-              <select 
-                id="year-select"
-                value={year} 
-                onChange={(e) => setYear(e.target.value)} 
-                style={inputStyle}
-              >
-                {years.map(y => (
-                  <option key={y} value={y}>{y}</option>
-                ))}
-              </select>
-            </div>
+          {/* Event Selection */}
+          <div>
+            <label style={labelStyle}>Select Event (You must create an event first)</label>
+            <select 
+              id="event-select"
+              value={eventId} 
+              onChange={(e) => {
+                setEventId(e.target.value);
+                setErrorMessage('');
+              }} 
+              style={inputStyle}
+            >
+              {events.length === 0 ? (
+                <option value="">No events found...</option>
+              ) : (
+                events.map(ev => (
+                  <option key={ev._id} value={ev._id}>{ev.name} ({ev.year})</option>
+                ))
+              )}
+            </select>
           </div>
-
-          {/* Conditional Input for Custom Event */}
-          <AnimatePresence>
-            {event === 'Other' && (
-              <motion.div
-                initial={{ opacity: 0, height: 0, marginTop: -10 }}
-                animate={{ opacity: 1, height: 'auto', marginTop: 0 }}
-                exit={{ opacity: 0, height: 0, marginTop: -10 }}
-                transition={{ duration: 0.2 }}
-                style={{ overflow: 'hidden' }}
-              >
-                <label style={labelStyle}>Enter Event Name</label>
-                <input 
-                  id="custom-event-name"
-                  type="text" 
-                  value={customEvent} 
-                  onChange={(e) => setCustomEvent(e.target.value)} 
-                  placeholder="e.g. Annual Athletic Meet 2026"
-                  required
-                  style={inputStyle}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Drag & Drop File Zone */}
           <div>

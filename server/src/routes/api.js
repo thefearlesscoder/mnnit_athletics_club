@@ -4,7 +4,7 @@ import User from '../models/Member.js';
 import Admin from '../models/Admin.js';
 
 import { editMemberProfile, memberLogin, memberRegister, normalUserEditProfile, normalUserLogin, normalUserSignUp, adminLogin } from '../controllers/authController.js';
-import { getNotices, getAlumni, getAllMembers, getEvents, getRecords, createNotice, createEvent, editNotice, deleteNotice, editEvent, deleteEvent } from '../controllers/contentController.js';
+import { getAllNotices, getNotices, getAlumni, getAllMembers, getEvents, getRecords, createNotice, createEvent, editNotice, deleteNotice, editEvent, deleteEvent, getGalleryImages } from '../controllers/contentController.js';
 import { submitRequest, getRequests, approveRequest, rejectRequest, getApprovedEmails } from '../controllers/requestController.js';
 import { getBirthdaySpotlight, addMember } from '../controllers/memberController.js';
 import { upload, uploadImages } from '../controllers/uploadController.js';
@@ -92,6 +92,7 @@ router.get('/content/alumni', getAlumni);
 router.get('/content/members', getAllMembers);
 router.get('/content/events', getEvents);
 router.get('/content/records', getRecords);
+router.get('/content/gallery', getGalleryImages);
 
 router.get('/content/birthday-spotlight', getBirthdaySpotlight);
 
@@ -111,6 +112,7 @@ router.post('/admin/requests/:id/reject', protectAdmin, rejectRequest);
 router.get('/admin/approved-emails', protectAdmin, getApprovedEmails);
 
 //Admin: Content management 
+router.get('/admin/notices', protectAdmin, getAllNotices);
 router.post('/admin/notice', protectAdmin, createNotice);
 router.put('/admin/notice/edit/:id', protectAdmin, editNotice);
 router.post('/admin/notice/delete/:id', protectAdmin, deleteNotice);

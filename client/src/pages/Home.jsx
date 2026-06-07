@@ -8,26 +8,22 @@ const Home = () => {
   const [eventImages, setEventImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const [notices, setNotices] = useState([]);
+
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchContent = async () => {
+      // Fetch Gallery Images for Hero Slideshow
       try {
-        const response = await axios.get(`${API}/content/events`);
+        const response = await axios.get(`${API}/content/gallery`);
         const currentYear = new Date().getFullYear();
-        // Filter events for current year (fallback to previous year if none exist yet)
-        let recentEvents = response.data.filter(event => event.year === currentYear);
-        if (recentEvents.length === 0) {
-            recentEvents = response.data.filter(event => event.year === currentYear - 1);
+        let recentImages = response.data.filter(img => img.event && img.event.year === currentYear);
+        if (recentImages.length === 0) {
+            recentImages = response.data.filter(img => img.event && img.event.year === currentYear - 1);
         }
         
-        let allImages = [];
-        recentEvents.forEach(event => {
-          if (event.images && event.images.length > 0) {
-            allImages = [...allImages, ...event.images];
-          }
-        });
+        let allImages = recentImages.map(img => ({ url: img.image }));
         
         if (allImages.length === 0) {
-            // Fallback generic sports images
             allImages = [
                 { url: "https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80", },
                 { url: "https://images.unsplash.com/photo-1552674605-15c3705e9705?auto=format&fit=crop&q=80",  },
@@ -37,15 +33,23 @@ const Home = () => {
 
         setEventImages(allImages);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Error fetching gallery images:", error);
         setEventImages([
             { url: "https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80", },
             { url: "https://images.unsplash.com/photo-1552674605-15c3705e9705?auto=format&fit=crop&q=80", }
         ]);
       }
+
+      // Fetch Notices
+      try {
+        const noticeRes = await axios.get(`${API}/content/notices`);
+        setNotices(noticeRes.data);
+      } catch (error) {
+        console.error("Error fetching notices:", error);
+      }
     };
     
-    fetchEvents();
+    fetchContent();
   }, []);
 
   useEffect(() => {
@@ -132,16 +136,19 @@ const Home = () => {
           <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ fontSize: '1.5rem' }}>📢</span> Announcements
           </h2>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <li style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>Trials for Fasters</strong><br/>
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Posted: Oct 12, 2024</span>
-            </li>
-            <li style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
-              <strong style={{ color: 'var(--text-primary)' }}>AAM Registration Open</strong><br/>
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Posted: Oct 10, 2024</span>
-            </li>
-          </ul>
+          {notices.length === 0 ? (
+             <p style={{ color: 'var(--text-muted)' }}>No active announcements.</p>
+          ) : (
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {notices.map((notice) => (
+                <li key={notice._id} style={{ paddingBottom: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>{notice.title}</strong><br/>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{notice.content}</span><br/>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--accent-primary)' }}>Posted: {new Date(notice.createdAt).toLocaleDateString()}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Birthday Spotlight */}

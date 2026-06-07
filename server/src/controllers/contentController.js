@@ -35,10 +35,21 @@ export const getNotices = async (req, res) => {
   }
 };
 
+import UploadImage from '../models/UploadImage.js';
+
 export const getEvents = async (req, res) => {
   try {
     const events = await Event.find({});
     res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getGalleryImages = async (req, res) => {
+  try {
+    const images = await UploadImage.find({}).populate('event');
+    res.json(images);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -61,6 +72,15 @@ export const createNotice = async (req, res) => {
         const notice = new Notice({ title, content, displayUntil });
         await notice.save();
         res.status(201).json(notice);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const getAllNotices = async (req, res) => {
+    try {
+        const notices = await Notice.find({});
+        res.json(notices);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

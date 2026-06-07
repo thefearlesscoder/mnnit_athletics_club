@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
 import UploadImage from '../models/UploadImage.js';
+import Event from '../models/Event.js';
 
 // Configure Cloudinary using environment variables
 cloudinary.config({
@@ -47,19 +48,25 @@ const uploadToCloudinary = (fileBuffer, folderName, originalName) => {
  */
 export const uploadImages = async (req, res) => {
   try {
-    const { event, year } = req.body;
+    const { eventId } = req.body;
 
-    if (!event || !year) {
-      return res.status(400).json({ message: 'Event and year are required.' });
+    if (!eventId) {
+      return res.status(400).json({ message: 'Event ID is required.' });
     }
 
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: 'Please select or drag at least one image file to upload.' });
     }
+    
+    // Verify Event exists to get its name and year
+    const event = await Event.findById(eventId);
+    if (!event) {
+        return res.status(404).json({ message: 'Event not found.' });
+    }
 
     // Dynamic folder name created in Cloudinary: event_year (e.g. AAM_2026, Inter_NIT_2026)
-    const sanitizedEventName = event.trim().replace(/\s+/g, '_');
-    const folderName = `${sanitizedEventName}_${year}`;
+    const sanitizedEventName = event.name.trim().replace(/\s+/g, '_');
+    const folderName = `${sanitizedEventName}_${event.year}`;
 
     const uploadPromises = req.files.map(async (file) => {
       // 1. Upload the memory file buffer to Cloudinary
@@ -67,8 +74,7 @@ export const uploadImages = async (req, res) => {
 
       // 2. Save image details (URL & public_id) in MongoDB under the UploadImage collection
       const newImage = new UploadImage({
-        year,
-        event,
+        event: event._id,
         image: cloudinaryResult.secure_url,
         publicId: cloudinaryResult.public_id
       });

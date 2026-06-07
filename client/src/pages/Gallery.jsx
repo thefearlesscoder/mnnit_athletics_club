@@ -8,48 +8,53 @@ const Gallery = () => {
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear.toString());
   const [selectedImage, setSelectedImage] = useState(null);
-  const [events, setEvents] = useState([]);
+  const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Choice of three years including the current year
   const years = [currentYear.toString(), (currentYear - 1).toString(), (currentYear - 2).toString()];
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchGallery = async () => {
       try {
-        const res = await axios.get(`${API}/content/events`);
-        setEvents(res.data);
+        const res = await axios.get(`${API}/content/gallery`);
+        setGalleryImages(res.data);
       } catch (error) {
-        console.error('Failed to load gallery events:', error);
+        console.error('Failed to load gallery images:', error);
       } finally {
         setLoading(false);
       }
     };
-    fetchEvents();
+    fetchGallery();
   }, []);
 
   // Filter and extract all photos for the selected year
   let photos = [];
-  events.forEach(event => {
-    if (event.year?.toString() === selectedYear) {
-      if (event.images && event.images.length > 0) {
-        event.images.forEach((img, idx) => {
-          photos.push({
-            id: `${event._id}-${idx}`,
-            url: img.url,
-            caption: img.caption || event.name
-          });
-        });
-      }
+  galleryImages.forEach(img => {
+    if (img.event && img.event.year?.toString() === selectedYear) {
+      photos.push({
+        id: img._id,
+        url: img.image,
+        caption: img.event.name
+      });
     }
   });
 
   // If no photos exist for the selected year, populate with mock images to preview the layout
   if (photos.length === 0 && !loading) {
-    photos = Array.from({ length: 6 }).map((_, i) => ({
+    const mockImageUrls = [
+      "https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1552674605-15c3705e9705?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1532009877282-3340270e0529?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&q=80"
+    ];
+    
+    photos = mockImageUrls.map((url, i) => ({
       id: `mock-${i}`,
-      url: `https://images.unsplash.com/photo-1552674605-15c2145bc118?auto=format&fit=crop&w=400&q=70&random=${i}`,
-      caption: `Mock Image ${i + 1} (${selectedYear})`
+      url: url,
+      caption: `Athletics Highlight ${i + 1} (${selectedYear})`
     }));
   }
 
@@ -105,7 +110,7 @@ const Gallery = () => {
                 cursor: 'zoom-in', 
                 overflow: 'hidden', 
                 borderRadius: '10px',
-                height: '200px',
+                aspectRatio: '3/4',
                 boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
               }}
             >

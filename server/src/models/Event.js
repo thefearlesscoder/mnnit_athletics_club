@@ -14,11 +14,6 @@ const eventSchema = new mongoose.Schema({
   sponsors: [{ name: String, logoUrl: String }],
   organising_team: [{ name: String, role: String }],
   
-  // Gallery images related to the event
-  images: [{ 
-    url: { type: String, required: true }, // Cloudinary URL
-    caption: { type: String }
-  }]
 }, { timestamps: true });
 
 export default mongoose.model('Event', eventSchema);
