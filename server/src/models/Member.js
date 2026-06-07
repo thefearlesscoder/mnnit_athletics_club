@@ -13,8 +13,6 @@ const userSchema = new mongoose.Schema({
   dateOfBirth: { type: Date },
   profilePhoto: { type: String }, // URL from Cloudinary
   isCaptain: { type: Boolean, default: false },
-  
-  // For password reset/initial access via 2hr link
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 }, { timestamps: true });

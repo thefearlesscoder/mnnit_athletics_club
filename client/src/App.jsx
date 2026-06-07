@@ -43,6 +43,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+        <Route path="/login" element={<MainLayout><Login /></MainLayout>}/>
+        <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
         <Route path="/alumni" element={<MainLayout><Alumni /></MainLayout>} />
         <Route path="/gallery" element={<MainLayout><Gallery /></MainLayout>} />
         <Route path="/records" element={<MainLayout><Records /></MainLayout>} />
@@ -50,7 +52,6 @@ const App = () => {
         <Route path="/team" element={<MainLayout><Team /></MainLayout>} />
         <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
         <Route path="/memberLogin" element={<MainLayout><Login /></MainLayout>} />
-        <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
         {/* Admin and Member Portals */}
         <Route path="/member-portal" element={<MainLayout><MemberEditProfile /></MainLayout>} />
         <Route path="/admin/*" element={<AdminDashboard />} />

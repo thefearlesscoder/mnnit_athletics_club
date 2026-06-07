@@ -1,12 +1,11 @@
 import Event from '../models/Event.js';
 import { Record, Notice } from '../models/Notice.js'; // Note: combined in previous mock for simplicity, but let's assume they export properly.
-import User from '../models/Member.js';
+import Member from '../models/Member.js';
 
 export const getAlumni = async (req, res) => {
   try {
     const currentYear = new Date().getFullYear().toString();
-    const alumni = await User.find({
-      role: { $ne: 'admin' },
+    const alumni = await Member.find({
       batch: { $lt: currentYear }
     });
     res.json(alumni);
@@ -18,8 +17,7 @@ export const getAlumni = async (req, res) => {
 export const getAllMembers = async (req, res) => {
   try {
     const currentYear = new Date().getFullYear().toString();
-    const members = await User.find({
-      role: { $ne: 'admin' },
+    const members = await Member.find({
       batch: { $gte: currentYear }
     });
     res.json(members);

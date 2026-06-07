@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
+const API = import.meta.env.VITE_API_URL;
+
+const currentYear = new Date().getFullYear();
+
+const years = [];
+for (let year = 2016; year <= currentYear + 3; year++) {
+  years.push(year);
+}
 
 const FloatingRequestButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', role: 'member', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -14,18 +22,12 @@ const FloatingRequestButton = () => {
     setStatus('loading');
     setErrorMsg('');
     try {
-      const res = await fetch(`${API}/requests`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Something went wrong.');
+      const res = await axios.post(`${API}/request`, formData);
       setStatus('success');
-      setFormData({ name: '', email: '', role: 'member', message: '' });
+      setFormData({ name: '', email: '', batch: '', message: '' });
     } catch (err) {
       setStatus('error');
-      setErrorMsg(err.message);
+      setErrorMsg(err.response?.data?.message || err.message || 'Something went wrong.');
     }
   };
 
@@ -165,7 +167,7 @@ const FloatingRequestButton = () => {
                       />
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                    {/* <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
                       <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>I am a...</label>
                       <select
                         id="req-role"
@@ -176,10 +178,37 @@ const FloatingRequestButton = () => {
                         <option value="member">Current Team Member</option>
                         <option value="alumni">Alumni</option>
                       </select>
+                    </div> */}
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                      <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>
+                        Batch
+                      </label>
+
+                      <select
+                        id="req-batch"
+                        required
+                        value={formData.batch}
+                        onChange={(e) =>
+                          setFormData({ ...formData, batch: e.target.value })
+                        }
+                        style={inputStyle}
+                      >
+                        <option value="">Select Passout Year</option>
+
+                        {Array.from(
+                          { length: new Date().getFullYear() + 2 - 2016 + 1 },
+                          (_, i) => new Date().getFullYear() + 2 - i
+                        ).map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
-                      <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>Message (Optional)</label>
+                      <label style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>About You/ Any message</label>
                       <textarea
                         id="req-message"
                         rows="2"

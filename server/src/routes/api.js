@@ -76,22 +76,22 @@ router.post('/add-members', addMember);
 router.post('/request', submitRequest);
 
 // Admin: Manage profile requests 
-router.get('/admin/requests', protect, admin, getRequests);
-router.post('/admin/requests/:id/approve', protect, admin, approveRequest);
-router.post('/admin/requests/:id/reject', protect, admin, rejectRequest);
-router.get('/admin/approved-emails', protect, admin, getApprovedEmails);
+router.get('/admin/requests', protectMember, admin, getRequests);
+router.post('/admin/requests/:id/approve', protectMember, admin, approveRequest);
+router.post('/admin/requests/:id/reject', protectMember, admin, rejectRequest);
+router.get('/admin/approved-emails', protectMember, admin, getApprovedEmails);
 
 //Admin: Content management 
-router.post('/admin/notice', protect, admin, createNotice);
-router.put('/admin/notice/edit/:id', protect, admin, editNotice);
-router.post('/admin/notice/delete/:id', protect, admin, deleteNotice);
+router.post('/admin/notice', protectMember, admin, createNotice);
+router.put('/admin/notice/edit/:id', protectMember, admin, editNotice);
+router.post('/admin/notice/delete/:id', protectMember, admin, deleteNotice);
 
-router.post('/admin/event', protect, admin, createEvent);
-router.put('/admin/event/edit/:id', protect, admin, editEvent);
-router.post('/admin/event/delete/:id', protect, admin, deleteEvent);
+router.post('/admin/event', protectMember, admin, createEvent);
+router.put('/admin/event/edit/:id', protectMember, admin, editEvent);
+router.post('/admin/event/delete/:id', protectMember, admin, deleteEvent);
 
 // Admin: Cloudinary Multi-image Upload
-router.post('/admin/gallery/upload', protect, admin, upload.any(), uploadImages);
+router.post('/admin/gallery/upload', protectMember, admin, upload.any(), uploadImages);
 
 // add records routes (schema not decided yet (maybe pdf display or in app display))
 
