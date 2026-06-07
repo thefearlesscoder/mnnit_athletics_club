@@ -1,10 +1,10 @@
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import LoginRequest from '../models/LoginRequest.js';
-import User from '../models/User.js';
+import Member from '../models/Member.js';
 import ApprovedEmail from '../models/ApprovedEmail.js';
 
-// ─── Nodemailer transporter ───────────────────────────────────────────────────
+// ─── Nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
@@ -16,19 +16,18 @@ const transporter = nodemailer.createTransport({
 });
 
 const ADMIN_EMAIL = process.env.SMTP_USER; // Admin gets notified at the club email
-const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+const CLIENT_URL = process.env.CLIENT_URL;
 
-// ─── Helper: send email ───────────────────────────────────────────────────────
+// ─── Helper: send email 
 const sendMail = async ({ to, subject, html }) => {
   await transporter.sendMail({
     from: process.env.MAIL_FROM,
     to,
     subject,
     html,
-  });
+  }); 
 };
 
-// PUBLIC: Submit a new profile request 
 // POST /api/v1/request
 export const submitRequest = async (req, res) => {
   const { name, email, role, batch, message } = req.body;
@@ -45,10 +44,15 @@ export const submitRequest = async (req, res) => {
         .json({ message: 'A pending request already exists for this email.' });
     }
 
+    // if user already approved navigate it to signup / login 
+    const approved = await ApprovedEmail.findOne({ email});
+    if(approved){
+      return res.status(400).json({ message: 'This email is already approved. You can log in or sign up now' });
+    }
+    
     const request = await LoginRequest.create({
       name,
       email,
-      role: role || 'member',
       batch,
       message,
     });
@@ -85,7 +89,7 @@ export const submitRequest = async (req, res) => {
   }
 };
 
-// ─── ADMIN: Get all pending requests ─────────────────────────────────────────
+// ─── ADMIN: Get all pending requests 
 // GET /api/v1/admin/requests
 export const getRequests = async (req, res) => {
   try {
@@ -96,7 +100,7 @@ export const getRequests = async (req, res) => {
   }
 };
 
-// ─── ADMIN: Approve a request ─────────────────────────────────────────────────
+// ─── ADMIN: Approve a request
 // POST /api/v1/admin/requests/:id/approve
 export const approveRequest = async (req, res) => {
   try {
@@ -147,7 +151,7 @@ export const approveRequest = async (req, res) => {
   }
 };
 
-// ─── ADMIN: Reject a request ──────────────────────────────────────────────────
+// ─── ADMIN: Reject a request 
 // POST /api/v1/admin/requests/:id/reject
 export const rejectRequest = async (req, res) => {
   try {
@@ -182,7 +186,7 @@ export const rejectRequest = async (req, res) => {
   }
 };
 
-// ─── ADMIN: Get all whitelisted emails ───────────────────────────────────────
+// ─── ADMIN: Get all whitelisted emails 
 // GET /api/v1/admin/approved-emails
 export const getApprovedEmails = async (req, res) => {
   try {

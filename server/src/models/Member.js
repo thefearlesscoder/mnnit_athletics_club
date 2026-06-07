@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'member', 'alumni'], default: 'member' },
   branch: { type: String },
   batch: { type: String }, // e.g., "2024"
   events: [{ type: String }],
@@ -14,10 +13,8 @@ const userSchema = new mongoose.Schema({
   dateOfBirth: { type: Date },
   profilePhoto: { type: String }, // URL from Cloudinary
   isCaptain: { type: Boolean, default: false },
-  
-  // For password reset/initial access via 2hr link
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 }, { timestamps: true });
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('Member', userSchema);

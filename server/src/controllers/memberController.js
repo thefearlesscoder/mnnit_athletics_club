@@ -1,57 +1,6 @@
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-
-const generateToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET , { expiresIn: '2h' });
-
-// ─── PUBLIC: Verify magic link token ─────────────────────────────────────────
-// GET /api/v1/member/verify-token?token=xxx
-export const verifyMagicLink = async (req, res) => {
-  const { token } = req.query;
-  if (!token) return res.status(400).json({ message: 'Token is required.' });
-
-  try {
-    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-
-    const user = await User.findOne({
-      resetPasswordToken: hashedToken,
-      resetPasswordExpire: { $gt: Date.now() },
-    });
-
-    if (!user) {
-      return res.status(401).json({ message: 'This link is invalid or has expired.' });
-    }
-
-    // Clear the one-time token now that it's been used
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
-    await user.save();
-
-    // Return a 2-hour session JWT + user profile data (this is still a problem)
-    res.json({
-      token: generateToken(user._id),
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        branch: user.branch,
-        batch: user.batch,
-        events: user.events,
-        achievements: user.achievements,
-        linkedIn: user.linkedIn,
-        instagram: user.instagram,
-        birthday: user.dateOfBirth ? user.dateOfBirth.toISOString().split('T')[0] : '',
-        profilePhoto: user.profilePhoto,
-        isCaptain: user.isCaptain,
-      },
-    });
-  } catch (error) {
-    console.error('[verifyMagicLink]', error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
+import Member from '../models/Member.js';
+import LoginRequest from '../models/LoginRequest.js';
+import ApprovedEmail from '../models/ApprovedEmail.js';
 
 // ─── MEMBER: Get own profile ──────────────────────────────────────────────────
 // GET /api/v1/member/profile   (requires Bearer JWT)
@@ -65,34 +14,7 @@ export const getMyProfile = async (req, res) => {
   }
 };
 
-// ─── MEMBER: Update own profile ───────────────────────────────────────────────
-// PUT /api/v1/member/profile   (requires Bearer JWT)
-export const updateMyProfile = async (req, res) => {
-  const { name, branch, batch, events, achievements, linkedIn, instagram, birthday, dateOfBirth, profilePhoto } = req.body;
 
-  try {
-    const user = await User.findById(req.user._id);
-    if (!user) return res.status(404).json({ message: 'User not found.' });
-
-    if (name) user.name = name;
-    if (branch !== undefined) user.branch = branch;
-    if (batch !== undefined) user.batch = batch;
-    if (events !== undefined) user.events = Array.isArray(events) ? events : events.split(',').map(e => e.trim()).filter(Boolean);
-    if (achievements !== undefined) user.achievements = Array.isArray(achievements) ? achievements : achievements.split(',').map(a => a.trim()).filter(Boolean);
-    if (linkedIn !== undefined) user.linkedIn = linkedIn;
-    if (instagram !== undefined) user.instagram = instagram;
-    
-    const dob = dateOfBirth || birthday;
-    if (dob !== undefined) user.dateOfBirth = dob ? new Date(dob) : undefined;
-    if (profilePhoto !== undefined) user.profilePhoto = profilePhoto;
-
-    const updated = await user.save();
-    res.json({ message: 'Profile updated successfully.', user: updated });
-  } catch (error) {
-    console.error('[updateMyProfile]', error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
 
 // add dummy members from (by admin) -> dummy route
 export const addMember = async (req, res) => {

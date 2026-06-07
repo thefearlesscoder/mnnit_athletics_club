@@ -22,6 +22,12 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'MAC Server is running' });
 });
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled Server Error:', err);
+  res.status(err.status || 500).json({ message: err.message || 'Internal Server Error' });
+});
+
 // Database Connection
 const connectDB = async () => {
   try {

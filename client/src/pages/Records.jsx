@@ -45,8 +45,8 @@ const Records = () => {
               onClick={() => { setSelectedYear(year); setSelectedEvent(Object.keys(MOCK_RECORDS[year])[0]); }}
               style={{
                 background: selectedYear === year ? 'var(--accent-primary)' : 'transparent',
-                color: selectedYear === year ? 'white' : 'var(--text-light)',
-                border: selectedYear === year ? 'none' : '1px solid rgba(255,255,255,0.2)',
+                color: selectedYear === year ? 'white' : 'var(--text-primary)',
+                border: selectedYear === year ? 'none' : '1px solid rgba(0,0,0,0.2)',
                 padding: '0.4rem 1.2rem',
                 borderRadius: '15px',
                 cursor: 'pointer'
@@ -64,7 +64,7 @@ const Records = () => {
               key={event}
               onClick={() => setSelectedEvent(event)}
               style={{
-                background: selectedEvent === event ? 'rgba(255,255,255,0.1)' : 'transparent',
+                background: selectedEvent === event ? 'rgba(0,0,0,0.05)' : 'transparent',
                 color: selectedEvent === event ? 'var(--accent-primary)' : 'var(--text-muted)',
                 padding: '0.3rem 1rem',
                 borderRadius: '10px',
@@ -88,19 +88,19 @@ const Records = () => {
         style={{ maxWidth: '800px', margin: '0 auto', padding: '0' }}
       >
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead style={{ background: 'rgba(59, 130, 246, 0.2)' }}>
+          <thead style={{ background: 'var(--accent-glow)' }}>
             <tr>
-              <th style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Event</th>
-              <th style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Athlete</th>
-              <th style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>Record Value</th>
+              <th style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>Event</th>
+              <th style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>Athlete</th>
+              <th style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>Record Value</th>
             </tr>
           </thead>
           <tbody>
             {recordsToDisplay.length > 0 ? recordsToDisplay.map((rec, idx) => (
-              <tr key={idx} style={{ background: idx % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)' }}>
-                <td style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)', fontWeight: 'bold' }}>{rec.event}</td>
-                <td style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'var(--accent-primary)' }}>{rec.athlete}</td>
-                <td style={{ padding: '1rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>{rec.value}</td>
+              <tr key={idx} style={{ background: idx % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.02)' }}>
+                <td style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.05)', fontWeight: 'bold' }}>{rec.event}</td>
+                <td style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.05)', color: 'var(--accent-primary)' }}>{rec.athlete}</td>
+                <td style={{ padding: '1rem', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>{rec.value}</td>
               </tr>
             )) : (
               <tr><td colSpan="3" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>No records found for this selection.</td></tr>

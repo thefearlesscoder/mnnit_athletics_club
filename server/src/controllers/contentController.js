@@ -1,6 +1,31 @@
 import Event from '../models/Event.js';
 import { Record, Notice } from '../models/Notice.js'; // Note: combined in previous mock for simplicity, but let's assume they export properly.
-import User from '../models/User.js';
+import Member from '../models/Member.js';
+import Highlight from '../models/Highlight.js';
+
+export const getAlumni = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear().toString();
+    const alumni = await Member.find({
+      batch: { $lt: currentYear }
+    });
+    res.json(alumni);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllMembers = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear().toString();
+    const members = await Member.find({
+      batch: { $gte: currentYear }
+    });
+    res.json(members);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 export const getNotices = async (req, res) => {
   try {
@@ -11,19 +36,21 @@ export const getNotices = async (req, res) => {
   }
 };
 
-export const getAlumni = async (req, res) => {
-  try {
-    const alumni = await User.find({ role: { $in: ['alumni', 'member'] } });
-    res.json(alumni);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+import UploadImage from '../models/UploadImage.js';
 
 export const getEvents = async (req, res) => {
   try {
     const events = await Event.find({});
     res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getGalleryImages = async (req, res) => {
+  try {
+    const images = await UploadImage.find({}).populate('event');
+    res.json(images);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -46,6 +73,15 @@ export const createNotice = async (req, res) => {
         const notice = new Notice({ title, content, displayUntil });
         await notice.save();
         res.status(201).json(notice);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const getAllNotices = async (req, res) => {
+    try {
+        const notices = await Notice.find({});
+        res.json(notices);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -135,4 +171,61 @@ export const deleteEvent = async(req,res) =>{
         res.status(500).json({message: error.message});
     }
 }
+
+// ─── Highlight Controllers ───────────────────────────────────────────────────
+
+export const getHighlights = async (req, res) => {
+  try {
+    const highlights = await Highlight.find({}).sort({ createdAt: -1 });
+    res.json(highlights);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const createHighlight = async (req, res) => {
+  const { title, youtubeUrl, description } = req.body;
+  try {
+    const highlight = new Highlight({ title, youtubeUrl, description });
+    await highlight.save();
+    res.status(201).json(highlight);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const editHighlight = async (req, res) => {
+  const id = req.params.id;
+  const { title, youtubeUrl, description } = req.body;
+  try {
+    const highlight = await Highlight.findById(id);
+    if (!highlight) {
+      return res.status(404).json({ message: "Highlight not found" });
+    }
+    highlight.title = title || highlight.title;
+    highlight.youtubeUrl = youtubeUrl || highlight.youtubeUrl;
+    if (description !== undefined) {
+        highlight.description = description;
+    }
+    await highlight.save();
+    res.json(highlight);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteHighlight = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const highlight = await Highlight.findById(id);
+    if (!highlight) {
+      return res.status(404).json({ message: "Highlight not found" });
+    }
+    await highlight.deleteOne();
+    res.json({ message: "Highlight deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 

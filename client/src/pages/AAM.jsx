@@ -18,7 +18,7 @@ const AAM = () => {
       <section style={{ 
         position: 'relative',
         height: '60vh',
-        background: 'linear-gradient(to right, rgba(15,23,42,0.9), rgba(15,23,42,0.4)), url("https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80")',
+        background: 'linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.4)), url("https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -44,7 +44,7 @@ const AAM = () => {
       <section className="page-content" style={{ paddingBottom: '0' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Podium Finishers Overview</h2>
         <div className="glass-card" style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-           <p style={{ color: 'var(--text-light)', fontSize: '1.1rem', lineHeight: '1.8' }}>
+           <p style={{ color: 'var(--text-primary)', fontSize: '1.1rem', lineHeight: '1.8' }}>
              The 2024 meet witnessed record-breaking performances across the board. In the 100m sprint, the competition was fierce, ending with a photo finish for the Gold. The distance events showcased incredible endurance, with new records set in the 10,000m. Every athlete brought their A-game, making this AAM one of the most memorable in MNNIT's history.
            </p>
         </div>
@@ -64,8 +64,8 @@ const AAM = () => {
                  overflow: 'hidden', 
                  borderRadius: '15px',
                  height: '250px',
-                 boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
-                 border: '2px solid rgba(255,255,255,0.05)'
+                 boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+                 border: '2px solid rgba(0,0,0,0.05)'
                }}
             >
               <img src={photo.url} alt={photo.caption} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -122,7 +122,7 @@ const AAM = () => {
           >
             <motion.div style={{ maxWidth: '90%', maxHeight: '90%' }}>
               <img src={selectedImage.url} alt={selectedImage.caption} style={{ width: '100%', height: 'auto', maxHeight: '85vh', borderRadius: '10px' }} />
-              <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '1.2rem', color: 'var(--text-light)' }}>{selectedImage.caption}</p>
+              <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '1.2rem', color: '#ffffff' }}>{selectedImage.caption}</p>
             </motion.div>
           </motion.div>
         )}
