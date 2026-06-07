@@ -30,4 +30,16 @@ services:
       - key: MAIL_FROM
         sync: false
       - key: CLIENT_URL
+        value: https://mnnit-athletics-club-client.onrender.com
+
+  - type: web
+    name: mnnit-athletics-club-client
+    env: static
+    plan: free
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://mnnit-athletics-club-server.onrender.com/api/v1
         sync: false

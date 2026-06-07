@@ -70,7 +70,7 @@ export const uploadImages = async (req, res) => {
 
     const uploadPromises = req.files.map(async (file) => {
       // 1. Upload the memory file buffer to Cloudinary
-      const cloudinaryResult = await uploadToCloudinary(file.buffer, folderName, file.originalname);
+        const cloudinaryResult = await uploadToCloudinary(file.buffer, folderName, file.originalname);
 
       // 2. Save image details (URL & public_id) in MongoDB under the UploadImage collection
       const newImage = new UploadImage({
