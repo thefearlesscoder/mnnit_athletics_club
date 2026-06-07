@@ -4,7 +4,7 @@ import User from '../models/Member.js';
 import Admin from '../models/Admin.js';
 
 import { editMemberProfile, memberLogin, memberRegister, normalUserEditProfile, normalUserLogin, normalUserSignUp, adminLogin } from '../controllers/authController.js';
-import { getAllNotices, getNotices, getAlumni, getAllMembers, getEvents, getRecords, createNotice, createEvent, editNotice, deleteNotice, editEvent, deleteEvent, getGalleryImages } from '../controllers/contentController.js';
+import { getAllNotices, getNotices, getAlumni, getAllMembers, getEvents, getRecords, createNotice, createEvent, editNotice, deleteNotice, editEvent, deleteEvent, getGalleryImages, getHighlights, createHighlight, editHighlight, deleteHighlight } from '../controllers/contentController.js';
 import { submitRequest, getRequests, approveRequest, rejectRequest, getApprovedEmails } from '../controllers/requestController.js';
 import { getBirthdaySpotlight, addMember } from '../controllers/memberController.js';
 import { upload, uploadImages } from '../controllers/uploadController.js';
@@ -93,6 +93,7 @@ router.get('/content/members', getAllMembers);
 router.get('/content/events', getEvents);
 router.get('/content/records', getRecords);
 router.get('/content/gallery', getGalleryImages);
+router.get('/content/highlights', getHighlights);
 
 router.get('/content/birthday-spotlight', getBirthdaySpotlight);
 
@@ -120,6 +121,10 @@ router.post('/admin/notice/delete/:id', protectAdmin, deleteNotice);
 router.post('/admin/event', protectAdmin, createEvent);
 router.put('/admin/event/edit/:id', protectAdmin, editEvent);
 router.post('/admin/event/delete/:id', protectAdmin, deleteEvent);
+
+router.post('/admin/highlight', protectAdmin, createHighlight);
+router.put('/admin/highlight/edit/:id', protectAdmin, editHighlight);
+router.post('/admin/highlight/delete/:id', protectAdmin, deleteHighlight);
 
 // Admin: Cloudinary Multi-image Upload
 router.post('/admin/gallery/upload', protectAdmin, upload.any(), uploadImages);

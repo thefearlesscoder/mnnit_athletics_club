@@ -4,6 +4,7 @@ import AdminImageUpload from '../components/AdminImageUpload';
 import AdminRequests from '../components/admin/AdminRequests';
 import AdminEvents from '../components/admin/AdminEvents';
 import AdminNotices from '../components/admin/AdminNotices';
+import AdminHighlights from '../components/admin/AdminHighlights';
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
 
@@ -118,6 +119,7 @@ const AdminDashboard = () => {
       case 'requests': return <AdminRequests authHeaders={authHeaders} />;
       case 'event':   return <AdminEvents authHeaders={authHeaders} />;
       case 'notice':  return <AdminNotices authHeaders={authHeaders} />;
+      case 'highlights': return <AdminHighlights authHeaders={authHeaders} />;
       case 'images':  return <AdminImageUpload adminToken={adminToken} />;
       case 'birthday': return <div><h2>Birthday Spotlight</h2><p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>Select a member to spotlight on the landing page.</p></div>;
       case 'members': return <div><h2>Manage Members</h2><p style={{ color: 'var(--text-secondary)', marginTop: '1rem' }}>Member management coming soon. Use Login Requests to approve new members.</p></div>;
@@ -130,6 +132,7 @@ const AdminDashboard = () => {
     { id: 'event',    label: '🏆 Add Event' },
     { id: 'images',   label: '🖼️ Add Images' },
     { id: 'notice',   label: '📢 Add Notice' },
+    { id: 'highlights', label: '🎥 Highlights' },
     { id: 'birthday', label: '🎂 Birthday Spotlight' },
     { id: 'feedback', label: 'Feedbacks'},
     { id: 'members',  label: '👥 Manage Members' },

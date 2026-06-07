@@ -4,11 +4,18 @@ import axios from 'axios';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
+const getYouTubeVideoId = (url) => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
 const Home = () => {
   const [eventImages, setEventImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const [notices, setNotices] = useState([]);
+  const [highlights, setHighlights] = useState([]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -46,6 +53,14 @@ const Home = () => {
         setNotices(noticeRes.data);
       } catch (error) {
         console.error("Error fetching notices:", error);
+      }
+
+      // Fetch Highlights
+      try {
+        const highlightRes = await axios.get(`${API}/content/highlights`);
+        setHighlights(highlightRes.data);
+      } catch (error) {
+        console.error("Error fetching highlights:", error);
       }
     };
     
@@ -174,6 +189,50 @@ const Home = () => {
         </div>
 
       </section>
+
+      {/* Highlights Section */}
+      {highlights.length > 0 && (
+        <section style={{ padding: '2rem 3rem 4rem', background: 'var(--bg-secondary)', marginTop: '2rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{ fontSize: '2.5rem', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
+              <span style={{ color: 'var(--accent-primary)' }}>Event</span> Highlights
+            </h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Relive the best moments of MAC</p>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+            {highlights.map(highlight => {
+              const videoId = getYouTubeVideoId(highlight.youtubeUrl);
+              return (
+                <div key={highlight._id} className="glass-card" style={{ padding: '1rem', display: 'flex', flexDirection: 'column' }}>
+                  {videoId ? (
+                    <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '8px' }}>
+                      <iframe 
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                        src={`https://www.youtube.com/embed/${videoId}`} 
+                        title={highlight.title}
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen>
+                      </iframe>
+                    </div>
+                  ) : (
+                    <div style={{ padding: '2rem', background: '#e2e8f0', borderRadius: '8px', textAlign: 'center' }}>
+                      <p>Invalid Video Link</p>
+                      <a href={highlight.youtubeUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-primary)', fontSize: '0.9rem' }}>Open Link</a>
+                    </div>
+                  )}
+                  <h3 style={{ marginTop: '1rem', fontSize: '1.2rem', color: 'var(--text-primary)' }}>{highlight.title}</h3>
+                  {highlight.description && (
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.5rem', flex: 1 }}>{highlight.description}</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
     </div>
   );
 };
