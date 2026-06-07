@@ -1,7 +1,61 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
 const Home = () => {
+  const [eventImages, setEventImages] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(`${API}/content/events`);
+        const currentYear = new Date().getFullYear();
+        // Filter events for current year (fallback to previous year if none exist yet)
+        let recentEvents = response.data.filter(event => event.year === currentYear);
+        if (recentEvents.length === 0) {
+            recentEvents = response.data.filter(event => event.year === currentYear - 1);
+        }
+        
+        let allImages = [];
+        recentEvents.forEach(event => {
+          if (event.images && event.images.length > 0) {
+            allImages = [...allImages, ...event.images];
+          }
+        });
+        
+        if (allImages.length === 0) {
+            // Fallback generic sports images
+            allImages = [
+                { url: "https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80", },
+                { url: "https://images.unsplash.com/photo-1552674605-15c3705e9705?auto=format&fit=crop&q=80",  },
+                { url: "https://images.unsplash.com/photo-1532009877282-3340270e0529?auto=format&fit=crop&q=80",}
+            ];
+        }
+
+        setEventImages(allImages);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+        setEventImages([
+            { url: "https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80", },
+            { url: "https://images.unsplash.com/photo-1552674605-15c3705e9705?auto=format&fit=crop&q=80", }
+        ]);
+      }
+    };
+    
+    fetchEvents();
+  }, []);
+
+  useEffect(() => {
+    if (eventImages.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % eventImages.length);
+    }, 5000); 
+    return () => clearInterval(interval);
+  }, [eventImages]);
+
   return (
     <div className="page-content" style={{ padding: '0' }}>
       {/* Hero Section */}
@@ -11,25 +65,49 @@ const Home = () => {
         alignItems: 'center', 
         justifyContent: 'center',
         textAlign: 'center',
-        background: 'linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255, 255, 255, 0.7)), url("https://images.unsplash.com/photo-1461896836934-ffe607fa8211?auto=format&fit=crop&q=80")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255,255,255,0.6)' }}></div>
+        <AnimatePresence>
+          {eventImages.length > 0 && (
+            <motion.div
+              key={currentImageIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: `linear-gradient(to bottom, rgba(255,255,255,0.85), rgba(255, 255, 255, 0.6)), url("${eventImages[currentImageIndex].url}")`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                zIndex: 0
+              }}
+            />
+          )}
+        </AnimatePresence>
+
+        <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255,255,255,0.4)', zIndex: 1 }}></div>
+
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          style={{ position: 'relative', zIndex: 1, maxWidth: '800px', padding: '2rem' }}
+          style={{ position: 'relative', zIndex: 2, maxWidth: '800px', padding: '2rem' }}
         >
           <h1 style={{ fontSize: '4rem', marginBottom: '1rem', textShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
             <span style={{ color: 'var(--accent-primary)' }}>Faster.</span> Stronger. Higher.
           </h1>
-          <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '2rem' }}>
+          <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
             Welcome to the official legacy of the MNNIT Athletics Club. Discover our achievements, 
             meet the team, and witness the glory of our Annual Athletic Meets.
           </p>
+          {eventImages.length > 0 && eventImages[currentImageIndex].caption && (
+             <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', fontStyle: 'italic', fontWeight: '500', marginBottom: '2rem' }}>
+                📸 {eventImages[currentImageIndex].caption}
+             </p>
+          )}
           <button style={{ 
             background: 'var(--accent-primary)', 
             color: 'white', 

@@ -4,13 +4,7 @@ import AdminImageUpload from '../components/AdminImageUpload';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
-// ─── Mock admin credentials (Option A) ───────────────────────────────────────
-// A hardcoded JWT is issued on successful mock-login for all admin API calls.
-const MOCK_ADMIN = { email: 'admin@mac.com', password: 'admin' };
-// We sign requests using a static token that the backend 'protect' middleware
-// will accept IF a real admin user with this _id exists in MongoDB, OR we use
-// a special bypass approach: the admin panel keeps the real JWT from loginUser.
-// For full Option-A compatibility the mock login calls the real /auth/login API.
+
 
 const roleColors = { member: '#3b82f6', alumni: '#8b5cf6' };
 
@@ -68,19 +62,12 @@ const AdminDashboard = () => {
   const [noticeContent, setNoticeContent] = useState('');
   const [noticeUntil, setNoticeUntil] = useState('');
 
-  // ── Mock login — calls the real /auth/login so a real admin user gets a token
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
 
-    // Option A: Accept mock credentials and call the real API
-    if (email !== MOCK_ADMIN.email || password !== MOCK_ADMIN.password) {
-      setLoginError('Invalid admin credentials. Use admin@mac.com / admin');
-      return;
-    }
-
     try {
-      const res = await fetch(`${API}/auth/login`, {
+      const res = await fetch(`${API}/auth/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -90,14 +77,10 @@ const AdminDashboard = () => {
         setAdminToken(data.token);
         setIsLoggedIn(true);
       } else {
-        // If real DB user doesn't exist yet, still allow mock access for local dev
-        // but warn the user.
-        setLoginError(data.message || 'Login failed. Ensure a real admin user exists in MongoDB or seed the DB.');
+        setLoginError(data.message || 'Login failed. Ensure a real admin user exists in MongoDB.');
       }
     } catch {
-      // Network error — still allow mock access for offline dev
-      setAdminToken('mock_offline');
-      setIsLoggedIn(true);
+      setLoginError('Network error — Failed to connect to server.');
     }
   };
 
@@ -162,7 +145,7 @@ const AdminDashboard = () => {
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Email</label>
-              <input id="admin-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required style={inputStyle} placeholder="admin@mac.com" />
+              <input id="admin-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required style={inputStyle} placeholder="admin@example.com" />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Password</label>

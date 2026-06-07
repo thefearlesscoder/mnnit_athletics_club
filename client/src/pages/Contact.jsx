@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaInstagram } from "react-icons/fa";
-import clubLogo from "../public/logo.png"; // adjust path
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5001/api/v1';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    alert('Message sent! (Mock)');
+    try {
+      const response = await axios.post(`${API}/feedback`, formData);
+      alert(response.data.message || "Feedback submitted successfully!");
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error) {
+      alert(error.response?.data?.message || error.message || "Something went wrong.");
+    }
   };
 
   return (
@@ -58,7 +66,7 @@ const Contact = () => {
               }}
             >
               <img
-                src={clubLogo}
+                src="/logo.png"
                 alt="MNNIT Athletics Club"
                 style={{
                   width: '120px',
